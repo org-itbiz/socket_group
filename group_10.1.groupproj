@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{26D7ABCF-79F3-44A5-A086-750246F11DDB}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="XLS_JSON_HEADER\XLS_JSONG.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="PGB_JSON_CONVERTOR\JSON_CONVERTOR.cbproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="XLS_JSONG">
+        <MSBuild Projects="XLS_JSON_HEADER\XLS_JSONG.cbproj"/>
+    </Target>
+    <Target Name="XLS_JSONG:Clean">
+        <MSBuild Projects="XLS_JSON_HEADER\XLS_JSONG.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="XLS_JSONG:Make">
+        <MSBuild Projects="XLS_JSON_HEADER\XLS_JSONG.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="JSON_CONVERTOR">
+        <MSBuild Projects="PGB_JSON_CONVERTOR\JSON_CONVERTOR.cbproj"/>
+    </Target>
+    <Target Name="JSON_CONVERTOR:Clean">
+        <MSBuild Projects="PGB_JSON_CONVERTOR\JSON_CONVERTOR.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JSON_CONVERTOR:Make">
+        <MSBuild Projects="PGB_JSON_CONVERTOR\JSON_CONVERTOR.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="XLS_JSONG;JSON_CONVERTOR"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="XLS_JSONG:Clean;JSON_CONVERTOR:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="XLS_JSONG:Make;JSON_CONVERTOR:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

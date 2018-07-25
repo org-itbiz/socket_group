@@ -1,0 +1,61 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Delphi/c++ builder local files (user-specific info)
+*.local
+
+# Resource files are binaries containing manifest, project icon and version info.
+# They can not be viewed as text or compared by diff-tools. Consider replacing them with .rc files.
+#*.res
+
+# history and backups folder
+__history/
+__recovery/
+__astcache/
+Android/
+*.~*
+
+# others
+*.ilc
+*.ild
+*.ilf
+*.ils
+*.map
+*.tds
+*.stat
+
+
+# log_data
+*.$$$
+*.#00
+*.#01

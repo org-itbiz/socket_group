@@ -1,0 +1,268 @@
+object mForm: TmForm
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'mForm'
+  ClientHeight = 669
+  ClientWidth = 516
+  Fill.Kind = Resource
+  Position = DesktopCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnCloseQuery = FormCloseQuery
+  DesignerMasterStyle = 0
+  object RegistMonitor: TTimer
+    Enabled = False
+    Interval = 5000
+    Left = 272
+    Top = 312
+  end
+  object Panel1: TPanel
+    Align = Client
+    Size.Width = 516.000000000000000000
+    Size.Height = 360.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object WebBrowser1: TWebBrowser
+      Align = Client
+      Size.Width = 516.000000000000000000
+      Size.Height = 360.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object PanelDebug: TPanel
+    Align = Bottom
+    Position.Y = 360.000000000000000000
+    Size.Width = 516.000000000000000000
+    Size.Height = 309.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object ToolBar1: TToolBar
+      Size.Width = 516.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Panel2: TPanel
+        Align = Top
+        Size.Width = 516.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object btnReload: TButton
+          Align = Right
+          StyledSettings = [Size, Style, FontColor]
+          Position.X = 436.000000000000000000
+          Size.Width = 40.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'reload'
+        end
+        object btnUrlGo: TButton
+          Align = Right
+          StyledSettings = [Size, Style, FontColor]
+          Position.X = 476.000000000000000000
+          Size.Width = 40.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Go'
+        end
+        object edtUrl: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          Align = Client
+          TabOrder = 2
+          Size.Width = 436.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyledSettings = [Style, FontColor]
+        end
+      end
+    end
+    object TabControl1: TTabControl
+      Align = Client
+      Size.Width = 516.000000000000000000
+      Size.Height = 268.000000000000000000
+      Size.PlatformDefault = False
+      TabHeight = 40.000000000000000000
+      TabIndex = 0
+      TabOrder = 1
+      TabPosition = Bottom
+      Sizes = (
+        516s
+        228s
+        516s
+        228s)
+      object TabItem1: TTabItem
+        AutoSize = False
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'LOG'
+        ExplicitSize.cx = 80.000000000000000000
+        ExplicitSize.cy = 40.000000000000000000
+        object Memo1: TMemo
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          DataDetectorTypes = []
+          StyledSettings = [Size, Style, FontColor]
+          Align = Client
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Size.Width = 506.000000000000000000
+          Size.Height = 187.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Viewport.Width = 506.000000000000000000
+          Viewport.Height = 187.000000000000000000
+        end
+        object btnClear: TButton
+          Align = Bottom
+          StyledSettings = [Size, Style, FontColor]
+          Margins.Left = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 197.000000000000000000
+          Size.Width = 506.000000000000000000
+          Size.Height = 26.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'Log Clear'
+          OnClick = btnClearClick
+        end
+      end
+      object TabItem2: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 69.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem2'
+        ExplicitSize.cx = 69.000000000000000000
+        ExplicitSize.cy = 40.000000000000000000
+        object Panel3: TPanel
+          Align = Top
+          Size.Width = 516.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object btnJsfunc: TButton
+            Align = Right
+            StyledSettings = [Size, Style, FontColor]
+            Position.X = 436.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = 'Js Func'
+          end
+          object edtJsfunc: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Client
+            TabOrder = 2
+            Text = 'sendMessage('#39'send msg'#39');'
+            Size.Width = 436.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            StyledSettings = [Style, FontColor]
+          end
+        end
+      end
+    end
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 500
+    Left = 360
+    Top = 316
+  end
+  object InitTimer: TTimer
+    Enabled = False
+    OnTimer = InitTimerTimer
+    Left = 192
+    Top = 312
+  end
+  object IdUDPClient1: TIdUDPClient
+    Port = 0
+    Left = 344
+    Top = 208
+  end
+  object IdUDPServer1: TIdUDPServer
+    Bindings = <>
+    DefaultPort = 0
+    OnUDPRead = IdUDPServer1UDPRead
+    Left = 224
+    Top = 208
+  end
+  object sgcWSServer: TsgcWebSocketServer
+    Port = 30001
+    OnConnect = sgcWSServerConnect
+    OnMessage = sgcWSServerMessage
+    OnDisconnect = sgcWSServerDisconnect
+    LoadBalancer.AutoRegisterBindings = False
+    LoadBalancer.AutoRestart = 0
+    LoadBalancer.Enabled = False
+    LoadBalancer.Port = 0
+    Authentication.Enabled = False
+    Authentication.AllowNonAuth = False
+    Authentication.URL.Enabled = True
+    Authentication.Session.Enabled = True
+    Authentication.Basic.Enabled = False
+    Bindings = <>
+    HeartBeat.Enabled = False
+    HeartBeat.Interval = 300
+    HeartBeat.Timeout = 0
+    MaxConnections = 0
+    SSLOptions.Port = 0
+    ThreadPool = False
+    ThreadPoolOptions.MaxThreads = 0
+    ThreadPoolOptions.PoolSize = 32
+    Extensions.DeflateFrame.Enabled = False
+    Extensions.DeflateFrame.WindowBits = 15
+    Extensions.PerMessage_Deflate.Enabled = False
+    Extensions.PerMessage_Deflate.ClientMaxWindowBits = 15
+    Extensions.PerMessage_Deflate.ClientNoContextTakeOver = False
+    Extensions.PerMessage_Deflate.MemLevel = 1
+    Extensions.PerMessage_Deflate.ServerMaxWindowBits = 15
+    Extensions.PerMessage_Deflate.ServerNoContextTakeOver = False
+    FallBack.Flash.Domain = '*'
+    FallBack.Flash.Enabled = False
+    FallBack.Flash.Ports = '*'
+    FallBack.ServerSentEvents.Enabled = False
+    FallBack.ServerSentEvents.Retry = 3
+    Options.FragmentedMessages = frgOnlyBuffer
+    Options.HTMLFiles = True
+    Options.JavascriptFiles = True
+    Options.ReadTimeOut = 10
+    Options.RaiseDisconnectExceptions = True
+    Options.ValidateUTF8 = False
+    QueueOptions.Binary.Level = qmNone
+    QueueOptions.Ping.Level = qmNone
+    QueueOptions.Text.Level = qmNone
+    Specifications.Drafts.Hixie76 = True
+    Specifications.RFC6455 = True
+    NotifyEvents = neAsynchronous
+    LogFile.Enabled = False
+    Throttle.BitsPerSec = 0
+    Throttle.Enabled = False
+    WatchDog.Attempts = 0
+    WatchDog.Enabled = False
+    WatchDog.Interval = 60
+    Left = 104
+    Top = 208
+  end
+end
