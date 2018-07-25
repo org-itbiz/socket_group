@@ -37,7 +37,6 @@
 #if defined(_PLAT_MSWINDOWS)
 #include <System.Win.Registry.hpp>
 #endif
-#include "iotc_define.h"
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {

@@ -5,6 +5,7 @@
 
 #include <mshtml.h>
 #include "Unit1.h"
+#include "Unit2.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "sgcWebSocket"
@@ -217,5 +218,10 @@ void __fastcall TmForm::sgcWSServer1Exception(TsgcWSConnection *Connection, Exce
 void __fastcall TmForm::sgcWSServer1Message(TsgcWSConnection *Connection, const UnicodeString Text)
 {
 //
+}
+//---------------------------------------------------------------------------
+void __fastcall TmForm::btnHWFormClick(TObject *Sender)
+{
+    hwsForm->Show();
 }
 //---------------------------------------------------------------------------

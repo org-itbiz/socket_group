@@ -34,6 +34,7 @@ __published:	// IDE-managed Components
 	TPanel *Panel2;
 	TEdit *edtReturnV;
 	TLabel *Label1;
+	TButton *btnHWForm;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 	void __fastcall IdUDPServer1UDPRead(TIdUDPListenerThread *AThread, const TIdBytes AData,
@@ -43,6 +44,7 @@ __published:	// IDE-managed Components
 	void __fastcall sgcWSServer1Error(TsgcWSConnection *Connection, const UnicodeString Error);
 	void __fastcall sgcWSServer1Exception(TsgcWSConnection *Connection, Exception *E);
 	void __fastcall sgcWSServer1Message(TsgcWSConnection *Connection, const UnicodeString Text);
+	void __fastcall btnHWFormClick(TObject *Sender);
 
 
 private:	// User declarations

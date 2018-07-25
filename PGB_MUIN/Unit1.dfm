@@ -65,6 +65,15 @@ object mForm: TmForm
       TabOrder = 0
       Text = #47532#53556#44050
     end
+    object btnHWForm: TButton
+      Left = 680
+      Top = 12
+      Width = 75
+      Height = 25
+      Caption = 'hw socket'
+      TabOrder = 1
+      OnClick = btnHWFormClick
+    end
   end
   object IdUDPServer1: TIdUDPServer
     Bindings = <>

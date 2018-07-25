@@ -4,14 +4,15 @@
 #pragma hdrstop
 
 #include "Unit1.h"
+#include "iotc_define.h"
 #include "muin_set3.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-//#pragma link "jsoncpp.lib"
 #pragma link "sgcWebSocket"
 #pragma link "sgcWebSocket_Classes"
 #pragma link "sgcWebSocket_Classes_Indy"
 #pragma link "sgcWebSocket_Server"
+#pragma link "sgcWebSocket"
 #pragma resource "*.fmx"
 TForm1 *Form1;
 
