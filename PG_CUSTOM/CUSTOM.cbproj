@@ -153,8 +153,8 @@
         <AllPackageLibs>rtl.lib;fmx.lib;IndySystem.lib;IndyCore.lib;IndyProtocols.lib;sgcWebSocketsC10_2.lib;dbrtl.lib</AllPackageLibs>
         <_TCHARMapping>wchar_t</_TCHARMapping>
         <Multithreaded>true</Multithreaded>
-        <IncludePath>HEADER\;..\COMMON\;D:\Dev\git_repo\SOCKET_GROP\PG_STORE\;$(IncludePath)</IncludePath>
-        <ILINK_LibraryPath>HEADER\;..\COMMON\;D:\Dev\git_repo\SOCKET_GROP\PG_STORE\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>..\socket_common\;HEADER\;..\COMMON\;D:\Dev\git_repo\SOCKET_GROP\PG_STORE\;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>..\socket_common\;HEADER\;..\COMMON\;D:\Dev\git_repo\SOCKET_GROP\PG_STORE\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <SanitizedProjectName>CUSTOM</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
@@ -376,13 +376,6 @@
         <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="..\COMMON\iotc_define.h">
-            <BuildOrder>3</BuildOrder>
-        </None>
-        <CppCompile Include="..\COMMON\UtilHelper.cpp">
-            <DependentOn>..\COMMON\UtilHelper.h</DependentOn>
-            <BuildOrder>4</BuildOrder>
-        </CppCompile>
         <CppCompile Include="CUSTOM.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
@@ -398,6 +391,10 @@
             <FormType>fmx</FormType>
             <DependentOn>Unit1.h</DependentOn>
             <BuildOrder>2</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\socket_common\UtilHelper.cpp">
+            <DependentOn>..\socket_common\UtilHelper.h</DependentOn>
+            <BuildOrder>4</BuildOrder>
         </CppCompile>
         <FormResources Include="Unit1.fmx"/>
         <BuildConfiguration Include="Release">
@@ -468,6 +465,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Configuration="Debug" Class="Android_SplashImage426">
+                    <Platform Name="Android">
+                        <RemoteName>splash_image.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32240mt.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
@@ -475,12 +478,6 @@
                 </DeployFile>
                 <DeployFile LocalName=".\Android\Debug\splash_image_def.xml" Configuration="Debug" Class="AndroidSplashImageDef">
                     <Platform Name="Android">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Configuration="Debug" Class="Android_SplashImage426">
-                    <Platform Name="Android">
-                        <RemoteName>splash_image.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -515,12 +512,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\assert\icons8-placeholder-32.png" Configuration="Debug" Class="Android_LauncherIcon36">
-                    <Platform Name="Android">
-                        <RemoteName>ic_launcher.png</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName=".\Win32\Debug\CUSTOM.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>CUSTOM.exe</RemoteName>
@@ -528,6 +519,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="..\assert\icons8-placeholder-48.png" Configuration="Debug" Class="Android_LauncherIcon48">
+                    <Platform Name="Android">
+                        <RemoteName>ic_launcher.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\assert\icons8-placeholder-32.png" Configuration="Debug" Class="Android_LauncherIcon36">
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -555,6 +552,12 @@
                 </DeployFile>
                 <DeployFile Condition="'$(UsingDelphiRTL)'=='true'" LocalName="$(BDS)\bin\borlndmm.dll" Class="DependencyModule">
                     <Platform Name="Win32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\Win32\Debug\CUSTOM.tds" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>CUSTOM.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
