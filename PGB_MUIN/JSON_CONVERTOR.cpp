@@ -1,20 +1,18 @@
 //---------------------------------------------------------------------------
 
-#include <fmx.h>
-#ifdef _WIN32
-#include <tchar.h>
-#endif
+#include <vcl.h>
 #pragma hdrstop
-#include <System.StartUpCopy.hpp>
+#include <tchar.h>
 //---------------------------------------------------------------------------
-USEFORM("mMain.cpp", mForm);
+USEFORM("sUnit.cpp", ServerForm);
 //---------------------------------------------------------------------------
-extern "C" int FMXmain()
+int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
 	try
 	{
 		Application->Initialize();
-		Application->CreateForm(__classid(TmForm), &mForm);
+		Application->MainFormOnTaskBar = true;
+		Application->CreateForm(__classid(TServerForm), &ServerForm);
 		Application->Run();
 	}
 	catch (Exception &exception)
