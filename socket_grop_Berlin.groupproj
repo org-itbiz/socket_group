@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{ED1310C3-881A-45E7-A471-F62FB615A82E}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="PGB_CUSTOM\JSON_CONVERTOR.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="PGB_MUIN\PG_MUIN.cbproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="JSON_CONVERTOR">
+        <MSBuild Projects="PGB_CUSTOM\JSON_CONVERTOR.cbproj"/>
+    </Target>
+    <Target Name="JSON_CONVERTOR:Clean">
+        <MSBuild Projects="PGB_CUSTOM\JSON_CONVERTOR.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JSON_CONVERTOR:Make">
+        <MSBuild Projects="PGB_CUSTOM\JSON_CONVERTOR.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="PG_MUIN">
+        <MSBuild Projects="PGB_MUIN\PG_MUIN.cbproj"/>
+    </Target>
+    <Target Name="PG_MUIN:Clean">
+        <MSBuild Projects="PGB_MUIN\PG_MUIN.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PG_MUIN:Make">
+        <MSBuild Projects="PGB_MUIN\PG_MUIN.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="JSON_CONVERTOR;PG_MUIN"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="JSON_CONVERTOR:Clean;PG_MUIN:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="JSON_CONVERTOR:Make;PG_MUIN:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

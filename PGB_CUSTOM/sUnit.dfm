@@ -121,6 +121,10 @@ object ServerForm: TServerForm
     object tabConfig2: TTabSheet
       Caption = 'EXCEL'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object GroupBox3: TGroupBox
         Left = 3
         Top = 0
@@ -270,6 +274,10 @@ object ServerForm: TServerForm
     object tabFile: TTabSheet
       Caption = #54028#51068#44221#47196
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label1: TLabel
         Left = 80
         Top = 307
