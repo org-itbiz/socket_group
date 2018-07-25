@@ -1,0 +1,5 @@
+callback([
+   [ "_C_NO", "_C_NAME", "_C_DOMAIN", "_C_UDP_PORT" ],
+   [ "1", "테스트 현장", "iotech.iptime.org" ]
+]
+)

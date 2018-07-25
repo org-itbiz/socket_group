@@ -1,0 +1,5 @@
+[
+   [ null, "_C_NAME", "_C_WEB_URL", "_C_UDP_PORT" ],
+   [ "_CUSTOM", "CUSTOM", "http://iotc365.com/test_locale/socket/", "11001" ],
+   [ "_DISC", "WEBDISC", "http://static.iotc365.cn/socket", "11002" ]
+]
