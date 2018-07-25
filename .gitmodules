@@ -1,0 +1,3 @@
+[submodule "socket_common"]
+	path = socket_common
+	url = git@github.com:org-itbiz/socket_common.git
