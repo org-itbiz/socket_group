@@ -19,16 +19,18 @@ __published:	// IDE-managed Components
 	TZylSerialPort *halin_3;
 	TZylSerialPort *bill_out_4;
 	TZylSerialPort *printer_5;
+	TButton *btnPrint;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall btnGateClick(TObject *Sender);
 	void __fastcall IO_coin_bill_IN_con_OUT_6Receive(TObject *Sender, AnsiString Buffer);
+	void __fastcall btnPrintClick(TObject *Sender);
 
 private:	// User declarations
-    void __fastcall SET_LOG_MEMO1(String sData);
 
 public:		// User declarations
+    void __fastcall SET_LOG_MEMO1(String sData);
 	void __fastcall Init_HW_COM();
-    void __fastcall OPEN_SIGNAL();
+    int __fastcall OPEN_SIGNAL();
 
 	__fastcall ThwsForm(TComponent* Owner);
 };

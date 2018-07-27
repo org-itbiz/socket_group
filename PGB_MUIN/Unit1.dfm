@@ -23,19 +23,16 @@ object mForm: TmForm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = 64
-    ExplicitTop = 16
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object WebBrowser1: TWebBrowser
       Left = 0
       Top = 0
       Width = 765
-      Height = 550
+      Height = 544
       Align = alClient
       TabOrder = 0
+      ExplicitTop = 6
       ControlData = {
-        4C000000114F0000D83800000000000000000000000000000000000000000000
+        4C000000114F0000393800000000000000000000000000000000000000000000
         000000004C000000000000000000000001000000E0D057007335CF11AE690800
         2B2E126208000000000000004C0000000114020000000000C000000000000046
         8000000000000000000000000000000000000000000000000000000000000000
@@ -73,6 +70,15 @@ object mForm: TmForm
       Caption = 'hw socket'
       TabOrder = 1
       OnClick = btnHWFormClick
+    end
+    object Button1: TButton
+      Left = 584
+      Top = 12
+      Width = 75
+      Height = 25
+      Caption = 'Initialize'
+      TabOrder = 2
+      OnClick = Button1Click
     end
   end
   object IdUDPServer1: TIdUDPServer

@@ -1,26 +1,29 @@
-//---------------------------------------------------------------------------
+ï»¿//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #pragma hdrstop
 
 #include <mshtml.h>
+#include "iotc_define.h"
+//#include "json.h"
 #include "Unit1.h"
 #include "Unit2.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+//#pragma link "jsoncpp.lib"
 #pragma link "sgcWebSocket"
 #pragma link "sgcWebSocket_Classes"
 #pragma link "sgcWebSocket_Server"
 #pragma resource "*.dfm"
 TmForm *mForm;
 
-//cmd
-const WORD UDP_SERVER_PORT = 11000;
-
 //---------------------------------------------------------------------------
 __fastcall TmForm::TmForm(TComponent* Owner)
 	: TForm(Owner)
 {
+	ioDevice = new IOTC_DEVICE;
+
+	UtilHelper = new TUtilHelper;
 }
 //---------------------------------------------------------------------------
 void __fastcall TmForm::FormCreate(TObject *Sender)
@@ -37,14 +40,69 @@ void __fastcall TmForm::FormCloseQuery(TObject *Sender, bool &CanClose)
 //---------------------------------------------------------------------------
 void __fastcall TmForm::Initialize()
 {
-	WebBrowser1->Navigate(L"http://muin.iotc365.com");
+//	sprintf(ioDevice->sMacAddress, "%s", AnsiString(UtilHelper->GetMacAddress()).c_str());
+	ioDevice->sMacAddress = UtilHelper->GetMacAddress();
 
-	IdUDPServer1->DefaultPort = UDP_SERVER_PORT;
-	IdUDPServer1->Bindings->Clear();
-	SHandle = IdUDPServer1->Bindings->Add();
-	SHandle->IP = "0.0.0.0";
-	SHandle->Port = UDP_SERVER_PORT;
-	IdUDPServer1->Active = true;
+//	hwsForm->SET_LOG_MEMO1(ioDevice->sMacAddress);
+
+	UTF8String info_json = GetJsonResult(URL_PC_WEB_BASE_INFO);
+
+	TJSONArray *LJsonArr = (TJSONArray*)TJSONObject::ParseJSONValue(TEncoding::UTF8->GetBytes(info_json), 0);
+	for (int i = 0; i < LJsonArr->Count; i++)
+	{
+//		SET_LOG_MEMO1(LJsonArr->Items[i]->ToString());
+		TJSONArray *LItemArr = (TJSONArray*)TJSONObject::ParseJSONValue(
+						TEncoding::UTF8->GetBytes(LJsonArr->Items[i]->ToString()), 0);
+		for (int j = 0; j < LItemArr->Count; j++)
+		{
+			if (!LItemArr->Items[j]->Value().IsEmpty())
+			{
+				APK_INFO[i][j] = LItemArr->Items[j]->Value();
+//				SET_LOG_MEMO1(LItemArr->Items[j]->Value());
+
+				if(ioDevice->sMacAddress == LItemArr->Items[j]->Value())
+				{
+//					sprintf(ioDevice->sWebUrl, "%s", AnsiString(APK_INFO[i][_C_WEB_URL]).c_str());
+					ioDevice->sWebUrl = APK_INFO[i][_C_WEB_URL];
+					ioDevice->nUDPPort = StrToInt(APK_INFO[i][_C_UDP_PORT]);
+				}
+			}
+		}
+		LItemArr->Free();
+	}
+	LJsonArr->Free();
+
+//	hwsForm->SET_LOG_MEMO1(ioDevice->sWebUrl);
+
+	if(ioDevice->sWebUrl != "")
+	{
+		sgcWSServer1->Active = true;
+
+//		WebBrowser1->EnableCaching = false;
+		WebBrowser1->Navigate(ioDevice->sWebUrl);
+	}
+
+
+	IdUDPServer1->DefaultPort = ioDevice->nUDPPort;
+
+	if(IdUDPServer1->Active)
+	{
+		IdUDPServer1->Active = false;
+
+		IdUDPServer1->Bindings->Clear();
+		SHandle = IdUDPServer1->Bindings->Add();
+		SHandle->IP = "0.0.0.0";
+		SHandle->Port = ioDevice->nUDPPort;
+		IdUDPServer1->Active = true;
+	}
+	else
+	{
+		IdUDPServer1->Bindings->Clear();
+		SHandle = IdUDPServer1->Bindings->Add();
+		SHandle->IP = "0.0.0.0";
+		SHandle->Port = ioDevice->nUDPPort;
+		IdUDPServer1->Active = true;
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TmForm::SetPermissions()
@@ -99,21 +157,22 @@ String __fastcall TmForm::GetJsonResult(String url)
 {
     String result;
 
-//	TIdHTTP *HTTP = new TIdHTTP(this);
-//	try {
-//		HTTP->ProtocolVersion = pv1_1;
-//		HTTP->Request->Accept = "application/json";
-//		HTTP->Request->ContentType = "application/json, charset=utf-8";
-////		HTTP->IOHandler->DefStringEncoding = enUTF8;
-//		//ssl ÀÏ°æ¿ì libeay32.dll, ssleay32.dll copy
-//		result = HTTP->Get(url);
-//	}
-//	catch (Exception &e)
-//	{
-//
-//	}
-//
-//	HTTP->Free();
+	TIdHTTP *HTTP = new TIdHTTP(this);
+	try {
+		HTTP->ProtocolVersion = pv1_1;
+		HTTP->Request->Accept = "application/json";
+		HTTP->Request->ContentType = "application/json, charset=utf-8";
+//		HTTP->IOHandler->DefStringEncoding = enUTF8;
+		//ssl ì¼ê²½ìš° libeay32.dll, ssleay32.dll copy
+		result = HTTP->Get(url);
+	}
+	catch (Exception &e)
+	{
+
+	}
+
+	HTTP->Free();
+
 	return result;
 }
 //---------------------------------------------------------------------------
@@ -186,7 +245,15 @@ void __fastcall TmForm::IdUDPServer1UDPRead(TIdUDPListenerThread *AThread, const
 		}
 		else
 		{
-			SOCKET_SERVER_SEND(ABinding->PeerIP, ABinding->PeerPort, edtReturnV->Text);
+			if(sRecvData == "GTOP1")
+			{
+				int state = hwsForm->OPEN_SIGNAL();
+				SOCKET_SERVER_SEND(ABinding->PeerIP, ABinding->PeerPort, IntToStr(state));
+			}
+			else
+			{
+				SOCKET_SERVER_SEND(ABinding->PeerIP, ABinding->PeerPort, edtReturnV->Text);
+			}
 		}
 
         lstRecvData.Length == 0;
@@ -222,6 +289,15 @@ void __fastcall TmForm::sgcWSServer1Message(TsgcWSConnection *Connection, const 
 //---------------------------------------------------------------------------
 void __fastcall TmForm::btnHWFormClick(TObject *Sender)
 {
-    hwsForm->Show();
+	hwsForm->Show();
 }
 //---------------------------------------------------------------------------
+void __fastcall TmForm::Button1Click(TObject *Sender)
+{
+	Initialize();
+
+	hwsForm->SET_LOG_MEMO1(ioDevice->sMacAddress);
+	hwsForm->SET_LOG_MEMO1(ioDevice->nUDPPort);
+}
+//---------------------------------------------------------------------------
+

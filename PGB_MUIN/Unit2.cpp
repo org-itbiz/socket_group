@@ -80,16 +80,20 @@ void __fastcall ThwsForm::Init_HW_COM()
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall ThwsForm::OPEN_SIGNAL()
+int __fastcall ThwsForm::OPEN_SIGNAL()
 {
+    int state = 0;
 	try {
 		IO_coin_bill_IN_con_OUT_6->SendData
 			((char *)"SGO345678912345678901234567890123456789E", 40);
+        state = 1;
 	}
 	catch (Exception &ex)
 	{
 		SET_LOG_MEMO1(ex.ClassName() + " - " + ex.Message);
+		state = -1;
 	}
+	return state;
 }
 //---------------------------------------------------------------------------
 void __fastcall ThwsForm::btnGateClick(TObject *Sender)
@@ -248,3 +252,9 @@ void __fastcall ThwsForm::IO_coin_bill_IN_con_OUT_6Receive(TObject *Sender, Ansi
 	run_com6 = 0;
 }
 //---------------------------------------------------------------------------
+void __fastcall ThwsForm::btnPrintClick(TObject *Sender)
+{
+    //
+}
+//---------------------------------------------------------------------------
+

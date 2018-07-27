@@ -32,6 +32,15 @@ object hwsForm: ThwsForm
     TabOrder = 1
     OnClick = btnGateClick
   end
+  object btnPrint: TButton
+    Left = 24
+    Top = 80
+    Width = 75
+    Height = 25
+    Caption = #50689#49688#51613
+    TabOrder = 2
+    OnClick = btnPrintClick
+  end
   object IO_coin_bill_IN_con_OUT_6: TZylSerialPort
     Port = spCOM6
     BaudRate = br019200
