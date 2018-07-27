@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 684
-  ClientWidth = 604
+  ClientWidth = 600
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -12,45 +12,97 @@ object Form1: TForm1
   DesignerMasterStyle = 3
   object Panel1: TPanel
     Align = Client
-    Size.Width = 604.000000000000000000
-    Size.Height = 361.000000000000000000
+    Size.Width = 600.000000000000000000
+    Size.Height = 312.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    object WebBrowser1: TWebBrowser
+    object Panel4: TPanel
       Align = Client
-      Size.Width = 604.000000000000000000
-      Size.Height = 361.000000000000000000
+      Size.Width = 600.000000000000000000
+      Size.Height = 288.000000000000000000
       Size.PlatformDefault = False
-      OnDidFinishLoad = WebBrowser1DidFinishLoad
+      TabOrder = 0
+      object WebBrowser1: TWebBrowser
+        Align = Client
+        Size.Width = 600.000000000000000000
+        Size.Height = 288.000000000000000000
+        Size.PlatformDefault = False
+        OnDidStartLoad = WebBrowser1DidStartLoad
+        OnDidFinishLoad = WebBrowser1DidFinishLoad
+      end
+    end
+    object StatusBar1: TStatusBar
+      Position.Y = 288.000000000000000000
+      ShowSizeGrip = True
+      Size.Width = 600.000000000000000000
+      Size.Height = 24.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object Panel2: TPanel
+        Align = FitLeft
+        Size.Width = 185.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object RoundRect1: TRoundRect
+          Position.X = 7.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 18.000000000000000000
+          Size.Height = 18.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+      object Panel3: TPanel
+        Align = FitRight
+        Position.X = 544.000000000000000000
+        Size.Width = 56.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+      object Panel5: TPanel
+        Align = Client
+        Size.Width = 359.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        object Rectangle1: TRectangle
+          Position.X = 368.000000000000000000
+          Position.Y = 2.000000000000000000
+          Size.Width = 34.000000000000000000
+          Size.Height = 20.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
     end
   end
   object pnlDebug: TPanel
     Align = Bottom
-    Position.Y = 361.000000000000000000
-    Size.Width = 604.000000000000000000
-    Size.Height = 323.000000000000000000
+    Position.Y = 312.000000000000000000
+    Size.Width = 600.000000000000000000
+    Size.Height = 372.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object TabControl1: TTabControl
       Align = Client
-      Size.Width = 604.000000000000000000
-      Size.Height = 323.000000000000000000
+      Size.Width = 600.000000000000000000
+      Size.Height = 372.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 1
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
-        604s
-        274s
-        604s
-        274s)
+        600s
+        323s
+        600s
+        323s)
       object TabItem1: TTabItem
         CustomIcon = <
           item
           end>
-        IsSelected = False
-        Size.Width = 302.000000000000000000
+        IsSelected = True
+        Size.Width = 300.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
@@ -62,20 +114,20 @@ object Form1: TForm1
           Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
           DataDetectorTypes = []
           Align = Client
-          Size.Width = 604.000000000000000000
-          Size.Height = 274.000000000000000000
+          Size.Width = 600.000000000000000000
+          Size.Height = 323.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 596.000000000000000000
-          Viewport.Height = 266.000000000000000000
+          Viewport.Width = 592.000000000000000000
+          Viewport.Height = 315.000000000000000000
         end
       end
       object TabItem2: TTabItem
         CustomIcon = <
           item
           end>
-        IsSelected = True
-        Size.Width = 302.000000000000000000
+        IsSelected = False
+        Size.Width = 300.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
@@ -161,7 +213,7 @@ object Form1: TForm1
     Top = 209
   end
   object sgcWSServer: TsgcWebSocketServer
-    Port = 30001
+    Port = 30002
     OnConnect = sgcWSServerConnect
     OnMessage = sgcWSServerMessage
     OnDisconnect = sgcWSServerDisconnect

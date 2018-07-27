@@ -1,5 +1,0 @@
-[
-   [ null, "_C_NAME", "_C_HTML", "_C_UDP_PORT" ],
-   [ "_CUSTOM", "CUSTOM", "http://static.iotc365.cn/socket", "11001" ],
-   [ "_DISC", "WEBDISC", "http://static.iotc365.cn/socket", "11002" ]
-]

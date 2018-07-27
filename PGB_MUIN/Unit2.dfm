@@ -1,0 +1,111 @@
+object hwsForm: ThwsForm
+  Left = 0
+  Top = 0
+  Caption = 'hwsForm'
+  ClientHeight = 476
+  ClientWidth = 706
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Memo1: TMemo
+    Left = 8
+    Top = 232
+    Width = 289
+    Height = 217
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 0
+  end
+  object btnGate: TButton
+    Left = 24
+    Top = 32
+    Width = 75
+    Height = 25
+    Caption = #52264#45800#44592
+    TabOrder = 1
+    OnClick = btnGateClick
+  end
+  object btnPrint: TButton
+    Left = 24
+    Top = 80
+    Width = 75
+    Height = 25
+    Caption = #50689#49688#51613
+    TabOrder = 2
+    OnClick = btnPrintClick
+  end
+  object IO_coin_bill_IN_con_OUT_6: TZylSerialPort
+    Port = spCOM6
+    BaudRate = br019200
+    EnableDTROnOpen = False
+    EnableRTSOnOpen = False
+    CustomPortName = 'vcom1'
+    AutoReceive = True
+    NewLine = #13#10
+    OnReceive = IO_coin_bill_IN_con_OUT_6Receive
+    Left = 158
+    Top = 299
+  end
+  object RS485_2: TZylSerialPort
+    CustomPortName = 'vcom1'
+    AutoReceive = True
+    NewLine = #13#10
+    Left = 158
+    Top = 88
+  end
+  object halin_3: TZylSerialPort
+    Port = spCOM3
+    BaudRate = br019200
+    EnableDTROnOpen = False
+    EnableRTSOnOpen = False
+    XonChar = '0'
+    XoffChar = '0'
+    XoffLim = 0
+    ErrorChar = '0'
+    EofChar = '0'
+    CustomPortName = 'vcom1'
+    AutoReceive = True
+    NewLine = #13#10
+    Left = 158
+    Top = 136
+  end
+  object bill_out_4: TZylSerialPort
+    Port = spCOM4
+    BaudRate = br009600
+    EnableDTROnOpen = False
+    EnableRTSOnOpen = False
+    XonChar = '0'
+    XoffChar = '0'
+    XoffLim = 0
+    ErrorChar = '0'
+    EofChar = '0'
+    CustomPortName = 'vcom1'
+    AutoReceive = True
+    NewLine = #13#10
+    Left = 158
+    Top = 192
+  end
+  object printer_5: TZylSerialPort
+    Port = spCOM5
+    BaudRate = br019200
+    EnableDTROnOpen = False
+    EnableRTSOnOpen = False
+    XonChar = '0'
+    XoffChar = '0'
+    XoffLim = 0
+    ErrorChar = '0'
+    EofChar = '0'
+    CustomPortName = 'vcom1'
+    AutoReceive = True
+    NewLine = #13#10
+    Left = 158
+    Top = 240
+  end
+end

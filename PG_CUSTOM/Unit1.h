@@ -26,7 +26,6 @@
 #include <IdTCPClient.hpp>
 #include <IdTCPConnection.hpp>
 
-
 #include "UtilHelper.h"
 #include <IdIPWatch.hpp>
 #include <FMX.WebBrowser.hpp>
@@ -34,10 +33,19 @@
 #include "sgcWebSocket_Classes.hpp"
 #include "sgcWebSocket_Classes_Indy.hpp"
 #include "sgcWebSocket_Server.hpp"
+#include <FMX.Objects.hpp>
 #if defined(_PLAT_MSWINDOWS)
 #include <System.Win.Registry.hpp>
 #endif
-#include "iotc_define.h"
+
+#if defined(_PLAT_ANDROID)
+#include <Androidapi.JNI.Net.hpp>
+#include <Androidapi.Helpers.hpp>
+#include <Androidapi.JNI.JavaTypes.hpp>
+#include <Androidapi.JNI.GraphicsContentViewText.hpp>
+#include <Androidapi.JNIBridge.hpp>
+#endif
+
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -59,6 +67,13 @@ __published:	// IDE-managed Components
 	TWebBrowser *WebBrowser1;
 	TTimer *Timer1;
 	TsgcWebSocketServer *sgcWSServer;
+	TStatusBar *StatusBar1;
+	TPanel *Panel2;
+	TPanel *Panel3;
+	TPanel *Panel4;
+	TPanel *Panel5;
+	TRoundRect *RoundRect1;
+	TRectangle *Rectangle1;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 	void __fastcall IdUDPServer1UDPRead(TIdUDPListenerThread *AThread, const TIdBytes AData,
@@ -72,6 +87,7 @@ __published:	// IDE-managed Components
 	void __fastcall sgcWSServerConnect(TsgcWSConnection *Connection);
 	void __fastcall sgcWSServerDisconnect(TsgcWSConnection *Connection, int Code);
 	void __fastcall WebBrowser1DidFinishLoad(TObject *ASender);
+	void __fastcall WebBrowser1DidStartLoad(TObject *ASender);
 
 private:	// User declarations
 	TIdSocketHandle * SHandle;
@@ -83,9 +99,11 @@ private:	// User declarations
 	void __fastcall SOCKET_SERVER_SEND(String sIPAddr, unsigned int nPort, String sMessage);
 	void __fastcall SOCKET_CLIENT_SEND(String sIPAddr, unsigned int nPort, String sMessage);
 	String __fastcall GetInternetIP(String sDomain);
+	String __fastcall GetJsonResult(String url);
+	String __fastcall GetMacAddress();
 	void __fastcall JsonArrToArray(String sJsonData);
-	String __fastcall GetJSONInfo(String url);
 	void __fastcall ExecWebBrowserJavascript(String strFunc);
+	void __fastcall ClearWebSocketClients();
 
 public:		// User declarations
 
