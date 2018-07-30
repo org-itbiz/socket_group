@@ -23,6 +23,7 @@
 #include <IdGlobal.hpp>
 #include <IdSocketHandle.hpp>
 #include "UtilHelper.h"
+#include "IniFiles.hpp"
 
 #ifdef _WIN32
 #include <System.Win.Registry.hpp>
@@ -57,8 +58,12 @@ __published:	// IDE-managed Components
 
 private:	// User declarations
 	TIdSocketHandle * SHandle;
+	TMemIniFile *MemIni;
 
 	void __fastcall Initialize();
+	void __fastcall CreateConfigInfo(String FileName);
+	void __fastcall GetConfigInfo();
+	void __fastcall SetConfigInfo();
 	void __fastcall SetPermissions();
 	void __fastcall Delay(unsigned int _time);
 	void __fastcall SOCKET_SERVER_SEND(String sIPAddr, unsigned int nPort, String sMessage);

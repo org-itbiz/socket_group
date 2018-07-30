@@ -30,7 +30,10 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 	pnlDebug->Visible = false;
 
 	#if defined(_PLAT_MSWINDOWS)
+	ioDevice->sConfigPath = "C:\\Users\\Public\\Documents\\iotc\\d\\s\\io_config.ini";
 	SetPermissions();
+	#elif defined(_PLAT_ANDROID)
+	ioDevice->sConfigPath = System::Ioutils::TPath::GetTempPath() + L"/" + Application->Title + L"/config.info";
 	#endif
 
 	Label1->Text = Application->Title;
@@ -39,16 +42,20 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
-//
+	if (MemIni)
+	{
+		delete MemIni;
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Initialize()
 {
+	SET_LOG_MEMO1(ioDevice->sConfigPath);
+    GetConfigInfo();
 //	sprintf(ioDevice->sMacAddress, "%s", AnsiString(UtilHelper->GetMacAddress()).c_str());
-	ioDevice->sMacAddress = UtilHelper->GetMacAddress();
-	SET_LOG_MEMO1(ioDevice->sMacAddress);
-	String info_json = GetJsonResult(URL_WEB_BASE_INFO);
-
+//	ioDevice->sMacAddress = UtilHelper->GetMacAddress();
+	String info_json = GetJsonResult(ioDevice->sRequestUrl);
+	SET_LOG_MEMO1(ioDevice->sDeviceGuid.UpperCase());
 	TJSONArray *LJsonArr = (TJSONArray*)TJSONObject::ParseJSONValue(TEncoding::UTF8->GetBytes(info_json), 0);
 	for (int i = 0; i < LJsonArr->Count; i++)
 	{
@@ -61,10 +68,8 @@ void __fastcall TForm1::Initialize()
 			{
 				APK_INFO[i][j] = LItemArr->Items[j]->Value();
 //				SET_LOG_MEMO1(LItemArr->Items[j]->Value());
-
-				if(ioDevice->sMacAddress == LItemArr->Items[j]->Value())
+				if(ioDevice->sDeviceGuid.UpperCase() == LItemArr->Items[j]->Value().UpperCase())
 				{
-//					sprintf(ioDevice->sWebUrl, "%s", AnsiString(APK_INFO[i][_C_WEB_URL]).c_str());
 					ioDevice->sWebUrl = APK_INFO[i][_C_WEB_URL];
 				}
 			}
@@ -168,33 +173,92 @@ void __fastcall TForm1::SetPermissions()
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::CreateConfigInfo(String FileName)
+{
+	if(!FileExists(FileName))
+	{
+		ForceDirectories(ExtractFilePath(FileName));
+		//create
+		MemIni = new TMemIniFile(FileName);
+
+		ioDevice->sDeviceGuid = UtilHelper->CreateGuid();
+
+		SetConfigInfo();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::GetConfigInfo()
+{
+	CreateConfigInfo(ioDevice->sConfigPath);
+
+    if (!MemIni) {
+        MemIni = new TMemIniFile(ioDevice->sConfigPath);
+    }
+	else
+	{
+        MemIni->Rename(ioDevice->sConfigPath, true);
+	}
+
+	ioDevice->sDeviceGuid = MemIni->ReadString(L"Config", L"device_guid", ioDevice->sDeviceGuid);
+
+	sprintf(http_buf, "%s?_t=%s", AnsiString(URL_DEVICE_BASE).c_str(),
+				AnsiString(ioDevice->sDeviceGuid).c_str());
+
+	ioDevice->sRequestUrl = http_buf;
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::SetConfigInfo()
+{
+	if (MemIni)
+	{
+		MemIni->WriteString (L"Config", L"device_guid", ioDevice->sDeviceGuid);
+
+		MemIni->UpdateFile();
+	}
+	else
+	{
+
+    }
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TForm1::SOCKET_SERVER_SEND(String sIPAddr, unsigned int nPort, String sMessage)
 {
 	if(sIPAddr != NULL && nPort > 0)
 	{
-		#if defined(_PLAT_ANDROID)
-		sIPAddr = GetInternetIP(sIPAddr);
-		#endif
-        #if defined(_PLAT_MSWINDOWS)
-		char host[100];
-		sprintf(host, "%s", AnsiString(sIPAddr).c_str());
-		sIPAddr = UtilHelper->GetIpByDomainName(host);
-		#endif
-		if(sIPAddr == "0.0.0.0")
+		if(IdUDPServer1->Active)
 		{
-			SET_LOG_MEMO1("sMessage faild");
-            return;
+			#if defined(_PLAT_ANDROID)
+			sIPAddr = GetInternetIP(sIPAddr);
+			#endif
+			#if defined(_PLAT_MSWINDOWS)
+			char host[100];
+			sprintf(host, "%s", AnsiString(sIPAddr).c_str());
+			sIPAddr = UtilHelper->GetIpByDomainName(host);
+			#endif
+			if(sIPAddr == "0.0.0.0")
+			{
+				SET_LOG_MEMO1("sMessage faild");
+				return;
+			}
+
+			#if defined(_PLAT_MSWINDOWS)
+			OutputDebugString(sIPAddr.c_str());
+			#endif
+			sprintf(debuf_buf, "sMessage => %s", AnsiString(sMessage).c_str());
+			SET_LOG_MEMO1(debuf_buf);
+
+			SHandle->SendTo(sIPAddr, nPort, sMessage, Id_IPv4, enUTF8);
+			Application->ProcessMessages();
 		}
-
-        #if defined(_PLAT_MSWINDOWS)
-		OutputDebugString(sIPAddr.c_str());
-		#endif
-		sprintf(debuf_buf, "sMessage => %s", AnsiString(sMessage).c_str());
-		SET_LOG_MEMO1(debuf_buf);
-
-		SHandle->SendTo(sIPAddr, nPort, sMessage, Id_IPv4, enUTF8);
-		Application->ProcessMessages();
 	}
+	else
+	{
+		SET_LOG_MEMO1("udp server not active.");
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SOCKET_CLIENT_SEND(String sIPAddr, unsigned int nPort, String sMessage)
@@ -290,26 +354,25 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button2Click(TObject *Sender)
-{
-//	SET_LOG_MEMO1(muin_set3[_L3_설정][_C3_DOMAIN]);
-//	SET_LOG_MEMO1(muin_set3[_L3_무인1][_C3_포트]);
-	SOCKET_SERVER_SEND(muin_set3[_L3_설정][_C3_DOMAIN], StrToInt(muin_set3[_L3_무인1][_C3_포트]), "test2");
-}
-//---------------------------------------------------------------------------
 String __fastcall TForm1::GetInternetIP(String sDomain)
 {
-    UTF8String strip;
+    UTF8String sJsonResult;
 
-	Idhttp::TIdHTTP *HTTP = new Idhttp::TIdHTTP(this);
+    TStringStream *ss = new TStringStream();
+	TIdHTTP *idHttp = new TIdHTTP(this);
 	try {
-		HTTP->ProtocolVersion = pv1_1;
-		HTTP->Request->Accept = "application/json";
-		HTTP->Request->ContentType = "application/json";
+		idHttp->ProtocolVersion = pv1_1;
+		idHttp->Request->Accept = "application/json";
+		idHttp->Request->ContentType = "application/json";
+		idHttp->ConnectTimeout = 3000;
+        idHttp->ReadTimeout = 3000;
 		//ssl 일경우 libeay32.dll, ssleay32.dll copy
 		String request_data = request_data.sprintf(L"http://api.iotc365.com/api/get/ip_text?domain=%s&format=json", AnsiString(sDomain).c_str());
 
-		strip = HTTP->Get(request_data);
+//		sJsonResult = idHttp->Get(request_data.Trim());
+		idHttp->Get(request_data.Trim(), ss);
+		ss->Position = 0;
+		sJsonResult = ss->DataString.Trim();
         //jsonobj 로 변경
 		//에러 생기면 rad 10.2 맞는지 확인
 	}
@@ -318,8 +381,11 @@ String __fastcall TForm1::GetInternetIP(String sDomain)
 
 	}
 
-	HTTP->Free();
-	return strip;
+	idHttp->Free();
+	delete idHttp;
+    delete ss;
+
+	return sJsonResult;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::JsonArrToArray(String sJsonData)
@@ -380,11 +446,6 @@ void __fastcall TForm1::ExecWebBrowserJavascript(String strFunc)
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button3Click(TObject *Sender)
-{
-	SOCKET_SERVER_SEND(SERVER_365_DOMAIN, UDP_SERVER_PORT, CMD_GET_CONFIG);
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TForm1::Button4Click(TObject *Sender)
 {
@@ -407,7 +468,6 @@ void __fastcall TForm1::Button4Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
 void __fastcall TForm1::Timer1Timer(TObject *Sender)
 {
     Timer1->Enabled = false;
@@ -427,7 +487,9 @@ void __fastcall TForm1::sgcWSServerMessage(TsgcWSConnection *Connection, const U
 
 void __fastcall TForm1::sgcWSServerConnect(TsgcWSConnection *Connection)
 {
-//    RoundRect1->Fill->Color =
+	#ifdef _Windows
+//	RoundRect1->Fill->Color = clLime;
+	#endif
 }
 //---------------------------------------------------------------------------
 
@@ -477,3 +539,18 @@ void __fastcall TForm1::ClearWebSocketClients()
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::Rectangle1Click(TObject *Sender)
+{
+//	String info_json = GetJsonResult(URL_WEB_BASE_INFO);
+//	SET_LOG_MEMO1(info_json);
+	if(pnlDebug->Visible)
+	{
+		pnlDebug->Visible = false;
+	}
+	else
+	{
+		pnlDebug->Visible = true;
+		Initialize();
+	}
+}
+//---------------------------------------------------------------------------

@@ -28,6 +28,8 @@ __fastcall TmForm::TmForm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TmForm::FormCreate(TObject *Sender)
 {
+	ioDevice->sConfigPath = "C:\\Users\\Public\\Documents\\iotc\\d\\s\\io_config.ini";
+
 	SetPermissions();
 
     Initialize();
@@ -40,12 +42,13 @@ void __fastcall TmForm::FormCloseQuery(TObject *Sender, bool &CanClose)
 //---------------------------------------------------------------------------
 void __fastcall TmForm::Initialize()
 {
+    GetConfigInfo();
 //	sprintf(ioDevice->sMacAddress, "%s", AnsiString(UtilHelper->GetMacAddress()).c_str());
-	ioDevice->sMacAddress = UtilHelper->GetMacAddress();
+//	ioDevice->sMacAddress = UtilHelper->GetMacAddress();
 
 //	hwsForm->SET_LOG_MEMO1(ioDevice->sMacAddress);
 
-	UTF8String info_json = GetJsonResult(URL_PC_WEB_BASE_INFO);
+	UTF8String info_json = GetJsonResult(ioDevice->sRequestUrl);
 
 	TJSONArray *LJsonArr = (TJSONArray*)TJSONObject::ParseJSONValue(TEncoding::UTF8->GetBytes(info_json), 0);
 	for (int i = 0; i < LJsonArr->Count; i++)
@@ -60,7 +63,7 @@ void __fastcall TmForm::Initialize()
 				APK_INFO[i][j] = LItemArr->Items[j]->Value();
 //				SET_LOG_MEMO1(LItemArr->Items[j]->Value());
 
-				if(ioDevice->sMacAddress == LItemArr->Items[j]->Value())
+				if(ioDevice->sDeviceGuid.UpperCase() == (LItemArr->Items[j]->Value()).UpperCase())
 				{
 //					sprintf(ioDevice->sWebUrl, "%s", AnsiString(APK_INFO[i][_C_WEB_URL]).c_str());
 					ioDevice->sWebUrl = APK_INFO[i][_C_WEB_URL];
@@ -102,6 +105,58 @@ void __fastcall TmForm::Initialize()
 		SHandle->IP = "0.0.0.0";
 		SHandle->Port = ioDevice->nUDPPort;
 		IdUDPServer1->Active = true;
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TmForm::CreateConfigInfo(String FileName)
+{
+	if(!FileExists(FileName))
+	{
+		ForceDirectories(ExtractFilePath(FileName));
+		//create
+		MemIni = new TMemIniFile(FileName);
+
+		ioDevice->sDeviceGuid = UtilHelper->CreateGuid();
+
+		SetConfigInfo();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TmForm::GetConfigInfo()
+{
+	CreateConfigInfo(ioDevice->sConfigPath);
+
+    if (!MemIni) {
+        MemIni = new TMemIniFile(ioDevice->sConfigPath);
+    }
+	else
+	{
+        MemIni->Rename(ioDevice->sConfigPath, true);
+	}
+
+	ioDevice->sDeviceGuid = MemIni->ReadString(L"Config", L"device_guid", ioDevice->sDeviceGuid);
+
+	sprintf(http_buf, "%s?_t=%s", AnsiString(URL_DEVICE_BASE).c_str(),
+				AnsiString(ioDevice->sDeviceGuid).c_str());
+
+	ioDevice->sRequestUrl = http_buf;
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TmForm::SetConfigInfo()
+{
+	if (MemIni)
+	{
+		MemIni->WriteString (L"Config", L"device_guid", ioDevice->sDeviceGuid);
+
+		MemIni->UpdateFile();
+	}
+	else
+	{
+
     }
 }
 //---------------------------------------------------------------------------
@@ -296,7 +351,8 @@ void __fastcall TmForm::Button1Click(TObject *Sender)
 {
 	Initialize();
 
-	hwsForm->SET_LOG_MEMO1(ioDevice->sMacAddress);
+	hwsForm->SET_LOG_MEMO1(ioDevice->sDeviceGuid);
+	hwsForm->SET_LOG_MEMO1(ioDevice->sRequestUrl);
 	hwsForm->SET_LOG_MEMO1(ioDevice->nUDPPort);
 }
 //---------------------------------------------------------------------------
